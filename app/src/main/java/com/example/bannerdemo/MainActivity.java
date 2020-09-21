@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
     private BannerLayout banner;
@@ -28,6 +29,13 @@ public class MainActivity extends AppCompatActivity {
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
             banner.addView(imageView);
         }
+
+        banner.setItemClickListener(new BannerLayout.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                Toast.makeText(MainActivity.this, "position:" + position, Toast.LENGTH_SHORT).show();
+            }
+        });
 
     }
 }

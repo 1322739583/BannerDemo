@@ -1,5 +1,6 @@
 package com.example.bannerdemo;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
@@ -25,6 +26,7 @@ public class BannerLayout extends ViewGroup {
     private boolean isAuto=true;
     private Timer timer = new Timer();
     private TimerTask task;
+   @SuppressLint("HandlerLeak")
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(@NonNull Message msg) {
@@ -38,6 +40,22 @@ public class BannerLayout extends ViewGroup {
             }
         }
     };
+
+    private OnItemClickListener itemClickListener;
+    private boolean isClick=false;
+    public OnItemClickListener getItemClickListener() {
+        return itemClickListener;
+    }
+
+    public void setItemClickListener(OnItemClickListener itemClickListener) {
+        this.itemClickListener = itemClickListener;
+    }
+
+
+
+   interface OnItemClickListener{
+       void onItemClick(int position);
+   }
 
     public BannerLayout(Context context) {
         super(context);
@@ -64,7 +82,7 @@ public class BannerLayout extends ViewGroup {
                 }
             }
         };
-        timer.schedule(task, 100, 2000);
+        timer.schedule(task, 100, 3000);
     }
 
     public void startAuto(){
@@ -113,18 +131,24 @@ public class BannerLayout extends ViewGroup {
     public boolean onTouchEvent(MotionEvent event) {
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
+                isClick=true;
                 stopAuto();
                 x = (int) event.getX();
                 break;
             case MotionEvent.ACTION_MOVE:
+                isClick=false;
                 int moveX = (int) event.getX();
                 int distance = moveX - x;
                 scrollBy(-distance, 0);
                 x = moveX;
                 break;
             case MotionEvent.ACTION_UP:
+
                 int scrollX = getScrollX();
                 index = (scrollX + childWidth / 2) / childWidth;
+                if (isClick&&itemClickListener!=null){
+                        itemClickListener.onItemClick(index);
+                }
                 if (index < 0) {
                     index = 0;
                 } else if (index > childCount - 1) {
