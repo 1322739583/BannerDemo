@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Build;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,10 +20,11 @@ import java.util.List;
 /**
  * banner面板类，用于加载显示的内容和指示器
  */
-public class BannerPanelLayout extends FrameLayout {
+public class BannerPanelLayout extends FrameLayout implements BannerLayout.OnIndicatorChangeListener {
 
     private BannerLayout bannerLayout;
     private LinearLayout linearLayout;
+    private List<ImageView> contentViews;
 
     public BannerPanelLayout(@NonNull Context context) {
         super(context);
@@ -42,8 +44,10 @@ public class BannerPanelLayout extends FrameLayout {
     }
 
     private void init() {
+
         loadBannerLayout();
         loadIndicatorLayout();
+        bannerLayout.setIndicatorListener(this);
     }
 
 
@@ -72,22 +76,24 @@ public class BannerPanelLayout extends FrameLayout {
         FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) linearLayout.getLayoutParams();
         layoutParams.gravity=Gravity.BOTTOM;
         linearLayout.setLayoutParams(layoutParams);
-        if (Build.VERSION.SDK_INT>Build.VERSION_CODES.HONEYCOMB){
-            linearLayout.setAlpha(0.5f);
-        }else {
-            linearLayout.getBackground().setAlpha(100);
-        }
+//        if (Build.VERSION.SDK_INT>Build.VERSION_CODES.HONEYCOMB){
+//          linearLayout.
+  //      }else {
+            //使用这个方法就行，在api16是生效的，不影响子View的透明度
+            linearLayout.getBackground().mutate().setAlpha(100);
+      //  }
 
 
 
 
     }
 
-    public void setImages(List<View> views) {
+    public void setImages(List<ImageView> views) {
         for (int i = 0; i < views.size(); i++) {
             bannerLayout.addView(views.get(i));
             addIndicator();
         }
+        contentViews=views;
     }
 
     private void addIndicator() {
@@ -97,5 +103,22 @@ public class BannerPanelLayout extends FrameLayout {
         imageView.setLayoutParams(lp);
         imageView.setImageResource(R.drawable.dot_normal);
         linearLayout.addView(imageView);
+    }
+
+    @Override
+    public void onIndicatorChange(int position) {
+        Log.d("BannerPanelLayout", "position:" + position);
+        for (int i = 0; i <contentViews.size() ; i++) {
+
+            ImageView  child = (ImageView) linearLayout.getChildAt(i);
+            if (i==position){
+                child.setImageResource(R.drawable.dot_selected);
+            }else {
+                child.setImageResource(R.drawable.dot_normal);
+            }
+         //   child.invalidate();
+          //  child.postInvalidate();
+        }
+      //  linearLayout.postInvalidate();
     }
 }

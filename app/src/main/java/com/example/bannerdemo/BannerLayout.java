@@ -39,13 +39,27 @@ public class BannerLayout extends ViewGroup {
                         index=0;
                     }
                     scrollTo(index*childWidth,0);
+                    if (indicatorListener!=null){
+                        indicatorListener.onIndicatorChange(index);
+                    }
+                    postInvalidate();
                     break;
             }
         }
     };
 
     private OnItemClickListener itemClickListener;
+    private OnIndicatorChangeListener indicatorListener;
     private boolean isClick=false;
+
+
+
+
+
+    interface OnItemClickListener{
+       void onItemClick(int position);
+   }
+
     public OnItemClickListener getItemClickListener() {
         return itemClickListener;
     }
@@ -54,12 +68,19 @@ public class BannerLayout extends ViewGroup {
         this.itemClickListener = itemClickListener;
     }
 
-
-
-
-    interface OnItemClickListener{
-       void onItemClick(int position);
+   interface OnIndicatorChangeListener{
+        void onIndicatorChange(int position);
    }
+
+    public OnIndicatorChangeListener getIndicatorListener() {
+        return indicatorListener;
+    }
+
+    public void setIndicatorListener(OnIndicatorChangeListener indicatorListener) {
+        this.indicatorListener = indicatorListener;
+    }
+
+
 
     public BannerLayout(Context context) {
         super(context);
@@ -153,6 +174,7 @@ public class BannerLayout extends ViewGroup {
                 if (isClick&&itemClickListener!=null){
                         itemClickListener.onItemClick(index);
                 }
+
                 if (index < 0) {
                     index = 0;
                 } else if (index > childCount - 1) {
@@ -160,6 +182,10 @@ public class BannerLayout extends ViewGroup {
                 }
                 scrollTo(childWidth * index, 0);
                 startAuto();
+                if (indicatorListener!=null){
+                    indicatorListener.onIndicatorChange(index);
+                }
+                postInvalidate();
                 break;
             default:
                 break;

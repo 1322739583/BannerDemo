@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
        int width= metrics.widthPixels;
 
-        List<View> views=new ArrayList<>();
+        List<ImageView> views=new ArrayList<>();
 
         for (int i = 0; i < imgs.length; i++) {
             ImageView imageView=new ImageView(this);
