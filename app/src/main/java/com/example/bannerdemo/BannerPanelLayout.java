@@ -1,15 +1,19 @@
 package com.example.bannerdemo;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -45,6 +49,7 @@ public class BannerPanelLayout extends FrameLayout implements BannerLayout.OnInd
     }
 
     private void init() {
+        contentViews=new ArrayList<>();
 
         loadBannerLayout();
         loadIndicatorLayout();
@@ -116,6 +121,27 @@ public class BannerPanelLayout extends FrameLayout implements BannerLayout.OnInd
             addIndicator();
         }
         contentViews=views;
+    }
+
+    public void setImages(int[] resId){
+        for (int i = 0; i < resId.length; i++) {
+            ImageView imageView=new ImageView(getContext());
+            imageView.setLayoutParams(new ViewGroup.LayoutParams(ScreenUtil.getScreenWidth((Activity) getContext()), ViewGroup.LayoutParams.WRAP_CONTENT));
+            imageView.setImageResource(resId[i]);
+            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            contentViews.add(imageView);
+            // banner.addView(imageView);
+            bannerLayout.addView(imageView);
+            addIndicator();
+        }
+
+//        for (int i = 0; i < views.size(); i++) {
+//
+//        }
+    }
+
+    public void setImages(String[] urls){
+
     }
 
     private void addIndicator() {
