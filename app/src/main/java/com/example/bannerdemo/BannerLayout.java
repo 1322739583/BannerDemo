@@ -11,10 +11,13 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-
+/**
+ * banner主要显示内容，不一定只显示图片，支持添加自定义View
+ */
 public class BannerLayout extends ViewGroup {
 
     private int childCount;
@@ -53,7 +56,8 @@ public class BannerLayout extends ViewGroup {
 
 
 
-   interface OnItemClickListener{
+
+    interface OnItemClickListener{
        void onItemClick(int position);
    }
 
