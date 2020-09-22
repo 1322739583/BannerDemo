@@ -2,29 +2,30 @@ package com.example.bannerdemo;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.os.Build;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
 import java.util.List;
 
 /**
  * banner面板类，用于加载显示的内容和指示器
  */
-public class BannerPanelLayout extends FrameLayout implements BannerLayout.OnIndicatorChangeListener {
+public class BannerPanelLayout extends FrameLayout implements BannerLayout.OnIndicatorChangeListener , BannerLayout.OnItemClickListener {
+
+
 
     private BannerLayout bannerLayout;
     private LinearLayout linearLayout;
     private List<ImageView> contentViews;
+
+
+
+    private BannerPanelLayout.OnItemClickListener onItemClickListener;
 
     public BannerPanelLayout(@NonNull Context context) {
         super(context);
@@ -48,6 +49,27 @@ public class BannerPanelLayout extends FrameLayout implements BannerLayout.OnInd
         loadBannerLayout();
         loadIndicatorLayout();
         bannerLayout.setIndicatorListener(this);
+        bannerLayout.setItemClickListener(this);
+    }
+
+    interface OnItemClickListener{
+        void onItemClick(int position);
+    }
+
+    public BannerPanelLayout.OnItemClickListener getOnItemClickListener() {
+        return onItemClickListener;
+    }
+
+    public void setOnItemClickListener(BannerPanelLayout.OnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
+    }
+
+    public BannerLayout getBannerLayout() {
+        return bannerLayout;
+    }
+
+    public void setBannerLayout(BannerLayout bannerLayout) {
+        this.bannerLayout = bannerLayout;
     }
 
 
@@ -120,5 +142,12 @@ public class BannerPanelLayout extends FrameLayout implements BannerLayout.OnInd
           //  child.postInvalidate();
         }
       //  linearLayout.postInvalidate();
+    }
+
+    @Override
+    public void onItemClick(int position) {
+        if (onItemClickListener!=null) {
+            onItemClickListener.onItemClick(position);
+        }
     }
 }

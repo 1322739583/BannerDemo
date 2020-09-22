@@ -42,12 +42,12 @@ public class MainActivity extends AppCompatActivity {
 
         banner.setImages(views);
 
-//        banner.setItemClickListener(new BannerLayout.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(int position) {
-//                Toast.makeText(MainActivity.this, "position:" + position, Toast.LENGTH_SHORT).show();
-//            }
-//        });
+        banner.setOnItemClickListener(new BannerPanelLayout.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                Toast.makeText(MainActivity.this, "position:" + position, Toast.LENGTH_SHORT).show();
+            }
+        });
 
     }
 }
